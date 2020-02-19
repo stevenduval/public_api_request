@@ -35,6 +35,7 @@ Clone the project - (https://github.com/stevenduval/public_api_request) -  and o
 
 * **Steven Duval** - *JavaScript code*
 * **TreeHouse** - *HTML & CSS code* - (https://teamtreehouse.com)
+* **Random User Generator** - *API* - (https://randomuser.me/)
 
 ## License
 
