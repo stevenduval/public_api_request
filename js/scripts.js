@@ -1,8 +1,9 @@
-//global variables
+// select the gallery div
 const gallery = document.querySelector('#gallery');
+// select the searchContainer div
 const searchContainer = document.querySelector('.search-container');
 
-// insert loading message if api is slow to respond
+// insert loading message which will show if api is slow to respond
 gallery.insertAdjacentHTML('beforebegin', '<div class="loading" style="margin-top: 50vh;">Loading....</div>');
 
 // fetch 12 random users from randomuser API
@@ -12,15 +13,17 @@ fetch('https://randomuser.me/api/?results=12&nat=US')
     // send the data to the generateEmployee function
     .then(data => generateEmployee(data))
     // generate search box
-    .then(() => search())
+    .then(() => generateSearch())
     //throw an error if something is wrong and place an error message onto the page
     .catch((error) => gallery.insertAdjacentHTML('beforebegin', `<div class="loading" style="margin-top: 50vh;">Oops something went wrong. Please try again!${error}</div>`))
     // remove loading message on success
     .finally(() => document.querySelector('.loading').remove());
 
 const generateEmployee = (data) => {
+    // store data results in dataResults const
+    const dataResults = data.results;
     // for each employee do the following
-    data.results.forEach(employee => {
+    dataResults.forEach(employee => {
         // create a div to store the employee
         const card = document.createElement('div');
         // set the div to have a class name of card
@@ -35,20 +38,22 @@ const generateEmployee = (data) => {
         <div class="card-info-container">
             <h3 id="name" class="card-name cap">${employee.name.first} ${employee.name.last}</h3>
             <p class="card-text">${employee.email}</p>
-            <p class="card-text cap">${employee.location.city}, ${employee.location.state}</p>
+            <p class="card-text cap">${employee.location.city}</p>
         </div>`
     });
     // creates an array of all of the cards on the page
     Array.from(gallery.childNodes)
     // for each card add an event listener that, when clicked, passes that cards information to the generateModal
-        .forEach((card, index) => card.addEventListener('click', () => generateModal(data.results[index-1])));
+        .forEach((card, index) => card.addEventListener('click', () => generateModal(dataResults, index)));
 }
 
-const generateModal = (employee) => {
-    console.log(employee);
+const generateModal = (dataResults, index) => {
+    // set current employee
+    const employee = dataResults[index];
+    // dob format
     const dob = new Date(employee.dob.date);
     const dobNewFormat = (dob.getMonth() + 1) + '/' + dob.getDate() + '/' +  dob.getFullYear();
-    // insert the modal into the page when the information is sent over 
+    // insert the following html into the page when a card is clicked
     gallery.insertAdjacentHTML('afterend', `
         <div class="modal-container">
         <div class="modal">
@@ -71,20 +76,56 @@ const generateModal = (employee) => {
             <button type="button" id="modal-next" class="modal-next btn">Next</button>
         </div>
     `);
-    // grab the close icon
-    const close = document.querySelector('#modal-close-btn');
-    // grab the modal
+
+    // select the modal window
     const modal = document.querySelector('.modal-container');
-    // listen for clicks on the close icon and then remove modal if clicked
-    close.addEventListener('click', () => modal.remove());
+    // listen for clicks on the modal
+    modal.addEventListener('click', (e) => {
+        // close modal if button or x is clicked
+        if (e.target.id === 'modal-close-btn' || e.target.parentNode.id === 'modal-close-btn' || e.target.id === 'modal-prev' || e.target.id === 'modal-next') { modal.remove(); } 
+        // listen for activity on modal prev and generate new modal depending upon index
+        if (e.target.id === 'modal-prev') { 
+            (index > 0 ) ? index-- : index = (dataResults.length -1); 
+            generateModal(dataResults, index);
+        }
+        // listen for activity on modal prev and generate new modal depending upon index
+        if (e.target.id === 'modal-next') { 
+            (index === (dataResults.length - 1)) ? index = 0 : index++; 
+            generateModal(dataResults, index);
+        } 
+    });
 }
 
-const search = () => {
+const generateSearch = () => {
+    // insert below html code into search-container div
     searchContainer.innerHTML = `
     <form action="#" method="get">
     <input type="search" id="search-input" class="search-input" placeholder="Search...">
     <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
-    </form>
-    `
+    </form> `
 }
+
+const search = (e) => {
+    // prevent submit when search icon is clicked
+    if (e.target.id === 'search-submit') { e.preventDefault(); } 
+    // create an array of all of the cards
+    Array.from(gallery.childNodes)
+        .forEach(card => {
+            // if card has style attribute remove it so all can be displayed
+            if (card.hasAttribute('style')) { card.removeAttribute('style')};
+            // check that the box is not zero characters before trying to match data
+            if (searchContainer.querySelector('#search-input').value.length > 0) { 
+                // set variables for text content of current card h3
+                const cardNameVal = card.querySelector('.card-info-container h3').textContent.toLowerCase();
+                // set variable for value of input
+                const inputNameVal = searchContainer.querySelector('input').value.toLowerCase();
+                // if card does not match the input set the display to none
+                if (!cardNameVal.includes(inputNameVal)) { card.style.display = 'none'; }
+            } 
+        });
+}
+// listen for click on search icon
+searchContainer.addEventListener('click', (e) => search(e));
+// listen for key event in search box
+searchContainer.addEventListener('keyup', search);
 
