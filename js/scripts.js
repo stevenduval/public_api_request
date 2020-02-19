@@ -3,7 +3,7 @@ const gallery = document.querySelector('#gallery');
 // select the searchContainer div
 const searchContainer = document.querySelector('.search-container');
 
-// insert loading message which will show if api is slow to respond
+// insert loading message which shows if api is slow to respond
 gallery.insertAdjacentHTML('beforebegin', '<div class="loading" style="margin-top: 50vh;">Loading....</div>');
 
 // fetch 12 random users from randomuser API
