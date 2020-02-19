@@ -15,7 +15,9 @@ You can paste in names and click the search icon or start typing and the search 
 ### Extras
 
 Switched font to roboto
+
 Green  box shadow around employee image on hover
+
 Green  box shadow around employee image in modal
 
 
