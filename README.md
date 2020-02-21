@@ -16,9 +16,9 @@ You can paste in names and click the search icon or start typing and the search 
 
 Switched font to roboto
 
-Green  box shadow around employee image on hover
+Green box shadow around employee image on hover
 
-Green  box shadow around employee image in modal
+Green box shadow around employee image in modal
 
 When searching prev & next buttons will display users returned in the search
 
