@@ -44,7 +44,9 @@ const generateEmployee = (data) => {
     // creates an array of all of the cards on the page
     Array.from(gallery.childNodes)
     // for each card add an event listener that, when clicked, passes that cards information to the generateModal
-        .forEach((card, index) => card.addEventListener('click', () => generateModal(dataResults, index)));
+        .forEach((card, index) => card.addEventListener('click', () => {
+            generateModal(dataResults, index)
+        }));
 }
 
 const generateModal = (dataResults, index) => {
@@ -81,19 +83,26 @@ const generateModal = (dataResults, index) => {
     const modal = document.querySelector('.modal-container');
     // listen for clicks on the modal
     modal.addEventListener('click', (e) => {
+        // create an empty array to use to store indices of non hidden elements
+        let activeEmployees = [];
+        // loop through each card and those that do not have style attribute push their index to activeEmployees
+        Array.from(gallery.childNodes)
+            .forEach((card, index) => {
+                if (!card.hasAttribute('style')) { activeEmployees.push(index);}
+            }); 
         // close modal if button or x is clicked
         if (e.target.id === 'modal-close-btn' || e.target.parentNode.id === 'modal-close-btn' || e.target.id === 'modal-prev' || e.target.id === 'modal-next') { modal.remove(); } 
-        // listen for activity on modal prev and generate new modal depending upon index
+        // listen for activity on modal prev and generate new modal
         if (e.target.id === 'modal-prev') { 
-            (index > 0 ) ? index-- : index = (dataResults.length -1); 
+            (activeEmployees.indexOf(index) > 0 ) ? index = activeEmployees[activeEmployees.indexOf(index) - 1] : index = activeEmployees[activeEmployees.length - 1];
             generateModal(dataResults, index);
         }
-        // listen for activity on modal prev and generate new modal depending upon index
-        if (e.target.id === 'modal-next') { 
-            (index === (dataResults.length - 1)) ? index = 0 : index++; 
-            generateModal(dataResults, index);
+        // listen for activity on modal prev and generate new modal
+         if (e.target.id === 'modal-next') { 
+            (activeEmployees.indexOf(index) < activeEmployees.length - 1 ) ? index = activeEmployees[activeEmployees.indexOf(index) + 1] : index = activeEmployees[0];
+             generateModal(dataResults, index);
         } 
-    });
+    });   
 }
 
 const generateSearch = () => {
@@ -112,7 +121,7 @@ const search = (e) => {
     Array.from(gallery.childNodes)
         .forEach(card => {
             // if card has style attribute remove it so all can be displayed
-            if (card.hasAttribute('style')) { card.removeAttribute('style')};
+            if (card.hasAttribute('style')) { card.removeAttribute('style') };
             // check that the box is not zero characters before trying to match data
             if (searchContainer.querySelector('#search-input').value.length > 0) { 
                 // set variables for text content of current card h3
@@ -128,4 +137,3 @@ const search = (e) => {
 searchContainer.addEventListener('click', (e) => search(e));
 // listen for key event in search box
 searchContainer.addEventListener('keyup', search);
-
