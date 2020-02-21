@@ -6,7 +6,7 @@ const searchContainer = document.querySelector('.search-container');
 // insert loading message which shows if api is slow to respond
 gallery.insertAdjacentHTML('beforebegin', '<div class="loading" style="margin-top: 50vh;">Loading....</div>');
 
-function generateEmployee(data) {
+const generateEmployee = (data) => {
     // store data results in dataResults const
     const dataResults = data.results;
     // for each employee do the following
