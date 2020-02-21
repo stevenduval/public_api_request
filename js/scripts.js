@@ -11,15 +11,15 @@ fetch('https://randomuser.me/api/?results=12&nat=US')
     // change the response to JSON format
     .then(response => response.json())
     // send the data to the generateEmployee function
-    .then(data => generateEmployee(data))
+    .then(generateEmployee)
     // generate search box
-    .then(() => generateSearch())
+    .then(generateSearch)
     //throw an error if something is wrong and place an error message onto the page
     .catch((error) => gallery.insertAdjacentHTML('beforebegin', `<div class="loading" style="margin-top: 50vh;">Oops something went wrong. Please try again!${error}</div>`))
     // remove loading message on success
     .finally(() => document.querySelector('.loading').remove());
 
-const generateEmployee = (data) => {
+function generateEmployee(data) {
     // store data results in dataResults const
     const dataResults = data.results;
     // for each employee do the following
@@ -49,7 +49,7 @@ const generateEmployee = (data) => {
         }));
 }
 
-const generateModal = (dataResults, index) => {
+function generateModal(dataResults, index) {
     // set current employee
     const employee = dataResults[index];
     // dob format
@@ -105,7 +105,7 @@ const generateModal = (dataResults, index) => {
     });   
 }
 
-const generateSearch = () => {
+function generateSearch() {
     // insert below html code into search-container div
     searchContainer.innerHTML = `
     <form action="#" method="get">
@@ -114,7 +114,7 @@ const generateSearch = () => {
     </form> `
 }
 
-const search = (e) => {
+function search(e) {
     // prevent submit when search icon is clicked
     if (e.target.id === 'search-submit') { e.preventDefault(); } 
     // create an array of all of the cards
