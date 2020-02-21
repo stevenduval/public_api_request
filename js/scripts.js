@@ -81,12 +81,12 @@ const generateModal = (dataResults, index) => {
         if (e.target.id === 'modal-close-btn' || e.target.parentNode.id === 'modal-close-btn' || e.target.id === 'modal-prev' || e.target.id === 'modal-next') { modal.remove(); } 
         // listen for activity on modal prev button and generate new modal data
         if (e.target.id === 'modal-prev') { 
-            (activeEmployees.indexOf(index) > 0 ) ? index = activeEmployees[activeEmployees.indexOf(index) - 1] : index = activeEmployees[activeEmployees.length - 1];
+            index = (activeEmployees.indexOf(index) > 0 ) ? activeEmployees[activeEmployees.indexOf(index) - 1] : activeEmployees[activeEmployees.length - 1];
             generateModal(dataResults, index);
         }
         // listen for activity on modal next button and generate new modal data
          if (e.target.id === 'modal-next') { 
-            (activeEmployees.indexOf(index) < activeEmployees.length - 1 ) ? index = activeEmployees[activeEmployees.indexOf(index) + 1] : index = activeEmployees[0];
+            index = (activeEmployees.indexOf(index) < activeEmployees.length - 1 ) ? activeEmployees[activeEmployees.indexOf(index) + 1] : activeEmployees[0];
              generateModal(dataResults, index);
         } 
     });   
