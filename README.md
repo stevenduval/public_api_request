@@ -20,6 +20,8 @@ Green  box shadow around employee image on hover
 
 Green  box shadow around employee image in modal
 
+When searching prev & next buttons will display users returned in the search
+
 
 ### Installing
 
