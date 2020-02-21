@@ -6,19 +6,6 @@ const searchContainer = document.querySelector('.search-container');
 // insert loading message which shows if api is slow to respond
 gallery.insertAdjacentHTML('beforebegin', '<div class="loading" style="margin-top: 50vh;">Loading....</div>');
 
-// fetch 12 random users from randomuser API
-fetch('https://randomuser.me/api/?results=12&nat=US')
-    // change the response to JSON format
-    .then(response => response.json())
-    // send the data to the generateEmployee function
-    .then(generateEmployee)
-    // generate search box
-    .then(generateSearch)
-    //throw an error if something is wrong and place an error message onto the page
-    .catch((error) => gallery.insertAdjacentHTML('beforebegin', `<div class="loading" style="margin-top: 50vh;">Oops something went wrong. Please try again!${error}</div>`))
-    // remove loading message on success
-    .finally(() => document.querySelector('.loading').remove());
-
 function generateEmployee(data) {
     // store data results in dataResults const
     const dataResults = data.results;
@@ -49,7 +36,7 @@ function generateEmployee(data) {
         }));
 }
 
-function generateModal(dataResults, index) {
+const generateModal = (dataResults, index) => {
     // set current employee
     const employee = dataResults[index];
     // dob format
@@ -105,7 +92,7 @@ function generateModal(dataResults, index) {
     });   
 }
 
-function generateSearch() {
+const generateSearch = () => {
     // insert below html code into search-container div
     searchContainer.innerHTML = `
     <form action="#" method="get">
@@ -114,7 +101,7 @@ function generateSearch() {
     </form> `
 }
 
-function search(e) {
+const search = (e) => {
     // prevent submit when search icon is clicked
     if (e.target.id === 'search-submit') { e.preventDefault(); } 
     // create an array of all of the cards
@@ -137,3 +124,16 @@ function search(e) {
 searchContainer.addEventListener('click', (e) => search(e));
 // listen for key event in search box
 searchContainer.addEventListener('keyup', search);
+
+// fetch 12 random users from randomuser API
+fetch('https://randomuser.me/api/?results=12&nat=US')
+    // change the response to JSON format
+    .then(response => response.json())
+    // send the data to the generateEmployee function
+    .then(generateEmployee)
+    // generate search box
+    .then(generateSearch)
+    //throw an error if something is wrong and place an error message onto the page
+    .catch((error) => gallery.insertAdjacentHTML('beforebegin', `<div class="loading" style="margin-top: 50vh;">Oops something went wrong. Please try again!${error}</div>`))
+    // remove loading message on success
+    .finally(() => document.querySelector('.loading').remove());
